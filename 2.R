@@ -259,13 +259,15 @@ midwest%>%
   head(5)
 
 
-midwest %>% 
-  mutate(분류=ifelse(kids_percent>=40,'large',ifelse(kids_percent>=30,'middle','small'))) %>% 
-  group_by(분류) %>% 
+midwest=midwest %>% 
+  mutate(grade=ifelse(kids_percent>=40,'large',ifelse(kids_percent>=30,'middle','small'))) %>% 
+  group_by(grade) %>% 
   summarise(count=n())
+
+table(midwest$grade)
 
 midwest %>% 
   mutate(asian_percent=midwest$popasian/midwest$poptotal*100) %>% 
   arrange(asian_percent) %>% 
-  summarise(state,county,asian_percent) %>% 
+  select(state,county,asian_percent) %>% 
   head(10)
