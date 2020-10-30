@@ -259,15 +259,182 @@ midwest%>%
   head(5)
 
 
-midwest=midwest %>% 
+midwest %>% 
   mutate(grade=ifelse(kids_percent>=40,'large',ifelse(kids_percent>=30,'middle','small'))) %>% 
   group_by(grade) %>% 
   summarise(count=n())
-
-table(midwest$grade)
+  #table(midwest$grade) 그룹&summarise 대신 이걸로 해도됨
 
 midwest %>% 
   mutate(asian_percent=midwest$popasian/midwest$poptotal*100) %>% 
   arrange(asian_percent) %>% 
   select(state,county,asian_percent) %>% 
   head(10)
+
+
+#
+df=data.frame(sex=c("M","F",NA,"M","F"),score=c(5,4,3,4,NA))
+df
+is.na(df)
+table(is.na(df))
+table(is.na(df$sex))
+table(is.na(df$score))
+mean(df$score)
+
+library(dplyr)
+
+df %>% filter(is.na(score))
+df %>% filter(!is.na(score))
+df.nomiss=df %>% filter(!is.na(score))
+mean(df.nomiss$score)
+
+df.nomiss=df %>% filter(!is.na(score)&!is.na(sex))
+df.nomiss
+# 모든 결측치 제거
+df.nomiss2=na.omit(df)
+df.nomiss2
+# score 결측치 제거후평균
+mean(df$score,na.rm = T)
+
+#
+exam=read.csv("csv_exam.csv")
+exam
+exam[c(3,8,15),"math"]=NA
+exam
+
+exam %>% summarise(mean_math=mean(math))
+exam %>% summarise(mean_math=mean(math,na.rm = T))
+
+meanMath=mean(exam$math,na.rm = T)
+meanMath
+meanMath=as.integer(meanMath)
+meanMath
+
+exam$math=ifelse(is.na(exam$math),meanMath,exam$math)
+table(is.na(exam$math))
+mean(exam$math)
+
+#
+mgp<-as.data.frame(ggplot2::mpg)
+mpg[c(65,124,131,153,212),'hwy']<-NA
+
+
+table(is.na(mpg$drv))
+table(is.na(mpg$hwy))
+
+#
+mpg %>% filter(!is.na(hwy)) %>% group_by(drv) %>% summarise(mean_hwy=mean(hwy))
+
+#
+outliner=data.frame(sex=c(1,2,5,2,1),score=c(5,4,3,2,6))
+table(outliner$sex)
+table(outliner$score)
+
+#결측처리
+outliner$sex=ifelse(outliner$sex==5,NA,outliner$sex)
+outliner$score=ifelse(outliner$score>5,NA,outliner$score)
+
+#결측치 제외하고 성별 평균점수 구하기
+outliner %>% filter(!is.na(sex)&!is.na(score)) %>% group_by(sex) %>% summarise(mean_score=mean(score))
+
+#
+mpg=as.data.frame(ggplot2::mpg)
+boxplot(mpg$hwy)$stats
+
+mpg$hwy=ifelse(mpg$hwy<12 | mpg$hwy>37, NA, mpg$hwy)
+table(is.na(mpg$hwy))
+
+mpg %>% group_by(drv) %>% 
+  summarise(mean_hwy=mean(hwy,na.rm = T))
+
+#
+mpg=as.data.frame(ggplot2::mpg)
+mpg[c(10,14,58,93),'drv']<-"k"
+mpg[c(29,43,129,203),'cty']<-c(3,4,39,42)
+
+#drv 이상치 결측처리
+mpg$drv=ifelse(!mpg$drv %in% c('4','f','r'),NA,mpg$drv)
+table(mpg$drv)
+
+#cty 이상치 결측처리
+boxplot(mpg$cty)$stats
+mpg$cty=ifelse(mpg$cty<9 | mpg$cty>26,NA,mpg$cty)
+boxplot(mpg$cty)
+
+#drv별로 cty 평균
+mpg %>%
+  filter(!is.na(drv)) %>%
+  group_by(drv) %>% 
+  summarise(mean_cty=mean(cty,na.rm = T))
+
+#
+?mpg 
+?boxplot
+
+?mtcars
+str(mtcars)
+
+# x : am, y : mpg
+boxplot(formula=mpg~am, data = mtcars)
+boxplot(formula=mpg~am, data = mtcars, col=c("yellow",'green'))
+boxplot(formula=mpg~am, data = mtcars, col=c("yellow",'green'), ylim=c(5,40))
+boxplot(formula=mpg~am, data = mtcars, col=c("yellow",'green'), ylim=c(5,40), 
+        main="Box plot", 
+        xlab="Transmission", 
+        ylab="Miles/(US)gallon",
+        names=c("automatic","manual"))
+
+boxplot(formula=mpg~am, data=mtcars)
+boxplot(formula=mpg~am, data=mtcars, axes=F)
+#상(3),하(1)좌(2)우(4)
+axis(1)
+axis(2)
+#axis(3)
+#axis(4)
+
+#mtext(c("automatic","manual"))
+#상(3),하(1)좌(2)우(4)
+#mtext(c("automatic","manual",side=1))
+#mtext(c("automatic","manual",side=1, line=2.5))
+#mtext(c("automatic","manual",side=1, line=2.5, at=c(0,1)))
+mtext(c("automatic","manual"),side=1, line=2.5, at=c(1,2))
+
+
+boxplot(formula=mpg~am, data = mtcars, col=c("yellow",'green'), ylim=c(5,40), 
+        main="Box plot", 
+        xlab="Transmission", 
+        ylab="Miles/(US)gallon",
+        names=c("automatic","manual"),
+        notch=T,
+        horizontal = T)
+
+boxplot(mpg~cyl, data=mtcars,
+        main="연료소비량",
+        col=c("cornsilk",'darkgray','cadetblue'),
+        ylab="Number of Cylinders",
+        xlab="Miles per Gallon",
+        notch=T,
+        horizontal=T)
+
+?ToothGrowth
+
+attach(ToothGrowth)
+supp=as.factor(supp)
+dose=as.factor(dose)
+
+boxplot(len~supp+dose,
+        xlab = "supplement type", ylab='length',
+        main='Pig Tooth Growth',
+        notch=T, col=c('red','blue'))
+legend(4,12,c('Orange Juice', "Ascorbic acid"), fill=c('red','blue'))
+
+?iris
+str(iris)
+head(iris)
+
+boxstats=boxplot(iris$Sepal.Width)
+text(x=rep(1,NROW(boxstats$out)), y=boxstats$out, pos=c(1,2,3,4))
+
+boxstats=boxplot(iris$Sepal.Width, horizontal = T)
+# pos: 라벨 위치 하(1)하(1)상(3)하(1)
+text(y=rep(1,NROW(boxstats$out)), x=boxstats$out, pos=c(1,1,3,1))
