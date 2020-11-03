@@ -110,3 +110,4 @@ head(age_income)
 
 ggplot(data=age_income, aes(x=age, y=mean_income))+
   geom_line()
+
