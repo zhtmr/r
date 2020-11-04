@@ -32,3 +32,4 @@ inspect(subset(buyItemResult, subset=lhs %pin% c('겹')))
 subBuyResultOrder = sort(subBuyResult,
                          by=c('support', 'lift', 'confidence'))
 inspect(subBuyResultOrder[1:10])
+

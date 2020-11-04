@@ -54,6 +54,7 @@ idx=sapply(searchL, function(x){'유럽' %in% x})
 searchEuropeL = searchL[idx]
 str(searchEuropeL)
 
+
 searchEuropeT = table(unlist(searchEuropeL))
 searchEuropeT = sort(searchEuropeT, decreasing = T)
 searchEuropeT[1:5]
