@@ -5,6 +5,7 @@ list_job=read_excel('Koweps_Codebook.xlsx',
                     sheet=2)
 head(list_job)
 head(welfare)
+table(welfare)
 head(welfare$code_job)
 #welfare에 직업명 추가
 welfare = left_join(welfare, list_job, id='code_job')
