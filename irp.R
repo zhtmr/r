@@ -1,4 +1,4 @@
-
+library(readxl)
 item=read.csv("archive/olist_order_items_dataset.csv")
 review=read.csv("archive/olist_order_reviews_dataset.csv")
 ir=inner_join(item,review,by="order_id")
@@ -29,5 +29,26 @@ table(irp$review_score)
 #table(irp$review_comment_message)
 write.csv(irp,"archive/irp3.csv")
 
+# 구별 생활인구변화
+gupop=read_excel("gupop.xlsx", col_names=T, sheet=2)
+table(gupop)
+str(gupop)
+
+# 2018년 1분기 가장인구수 많은 구
+gupop.2018=gupop %>% 
+  filter(기간=='2018.1/4') %>%
+  summarise(자치구,합계)
+
+gupop.2018$합계=ifelse(gupop.2018$합계>680000,NA,gupop.2018$합계)
+table(gupop.2018$합계)
+ggplot(gupop.2018$합계)
+
+ggplot(data = gupop.2018, aes(x=자치구, y=합계))+
+  geom_col()+
+  coord_flip()
+
+min(gupop.2018$합계)
+max(gupop.2018$합계)
+sort(gupop.2018$합계, decreasing=T)[2]
 
 
