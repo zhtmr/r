@@ -178,3 +178,4 @@ ggplot(Orange, aes(age,circumference, color=Tree))+
   geom_line(aes(linetype=Tree))+
   #그래프의 배경색 제거
   theme(panel.background = element_blank())
+
