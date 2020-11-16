@@ -200,6 +200,28 @@ colnames(gupopage[36:41])[max.col(gupopage[36:41], ties.method = "first")]
 
 write.csv(gupopage, "gupopage.csv")
 
+
+# 10대가 많은 지역 top5
+
+getAgePer(ten)
+
+getAgePer = function(n){
+  gupopage %>% 
+    group_by(자치구) %>% 
+    summarise(Per=mean({{n}}/tenTosixtySum*100)) %>% 
+    arrange(desc(Per)) %>% 
+    head(5)
+}
+
+# 20대
+getAgePer(twenty)
+
+# 30대
+getAgePer(thirty)
+
+# 40대
+getAgePer(fourty)
+
 ################################################################################
 # 내부데이터
 
