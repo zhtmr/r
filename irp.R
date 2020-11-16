@@ -134,52 +134,52 @@ gupopage=as.data.frame(gupopage)
 gupopage=read_excel("gupopage1.xlsx")
 View(gupopage)
 
-# 10대가 많은 지역
-gupopten=gupopage %>% 
-  group_by(자치구) %>% 
-  summarise(mean_ten=mean(ten)) %>% 
-  arrange(desc(mean_ten))
+# # 10대가 많은 지역
+# gupopten=gupopage %>% 
+#   group_by(자치구) %>% 
+#   summarise(mean_ten=mean(ten)) %>% 
+#   arrange(desc(mean_ten))
+# 
+# 
+# ggplot(data = gupopten, aes(x=reorder(자치구,mean_ten), y=mean_ten))+
+#   geom_col()+
+#   coord_flip()
+# 
+# # 20대가 많은 지역
+# gupoptwenty=gupopage %>% 
+#   group_by(자치구) %>% 
+#   summarise(mean_twenty=mean(twenty)) %>% 
+#   arrange(desc(mean_twenty))
+# 
+# ggplot(data = gupoptwenty, aes(x=reorder(자치구,mean_twenty), y=mean_twenty))+
+#   geom_col()+
+#   coord_flip()
+# 
+# # 30대가 많은 지역
+# gupopthirty=gupopage %>% 
+#   group_by(자치구) %>% 
+#   summarise(mean_thirty=mean(thirty)) %>% 
+#   arrange(desc(mean_thirty))
+# 
+# ggplot(data = gupopthirty, aes(x=reorder(자치구,mean_thirty), y=mean_thirty))+
+#   geom_col()+
+#   coord_flip()
+# 
+# # 40대가 많은 지역
+# gupopfourty=gupopage %>% 
+#   group_by(자치구) %>% 
+#   summarise(mean_fourty=mean(fourty)) %>% 
+#   arrange(desc(mean_fourty))
+# 
+# ggplot(data = gupopfourty, aes(x=reorder(자치구,mean_fourty), y=mean_fourty))+
+#   geom_col()+
+#   coord_flip()
 
 
-ggplot(data = gupopten, aes(x=reorder(자치구,mean_ten), y=mean_ten))+
-  geom_col()+
-  coord_flip()
-
-# 20대가 많은 지역
-gupoptwenty=gupopage %>% 
-  group_by(자치구) %>% 
-  summarise(mean_twenty=mean(twenty)) %>% 
-  arrange(desc(mean_twenty))
-
-ggplot(data = gupoptwenty, aes(x=reorder(자치구,mean_twenty), y=mean_twenty))+
-  geom_col()+
-  coord_flip()
-
-# 30대가 많은 지역
-gupopthirty=gupopage %>% 
-  group_by(자치구) %>% 
-  summarise(mean_thirty=mean(thirty)) %>% 
-  arrange(desc(mean_thirty))
-
-ggplot(data = gupopthirty, aes(x=reorder(자치구,mean_thirty), y=mean_thirty))+
-  geom_col()+
-  coord_flip()
-
-# 40대가 많은 지역
-gupopfourty=gupopage %>% 
-  group_by(자치구) %>% 
-  summarise(mean_fourty=mean(fourty)) %>% 
-  arrange(desc(mean_fourty))
-
-ggplot(data = gupopfourty, aes(x=reorder(자치구,mean_fourty), y=mean_fourty))+
-  geom_col()+
-  coord_flip()
-
-
-# 10대 + 20대
-tentwenty=inner_join(gupopten, gupoptwenty, by="자치구")
-# 10대 + 20대 + 30대
-tentwentythirty=inner_join(tentwenty,gupopthirty,by="자치구")
+# # 10대 + 20대
+# tentwenty=inner_join(gupopten, gupoptwenty, by="자치구")
+# # 10대 + 20대 + 30대
+# tentwentythirty=inner_join(tentwenty,gupopthirty,by="자치구")
 
 
 # 지역별 가장 많은 연령대 비율
