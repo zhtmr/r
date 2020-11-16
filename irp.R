@@ -186,21 +186,19 @@ tentwentythirty=inner_join(tentwenty,gupopthirty,by="자치구")
 ages=colnames(gupopage[36:41])[max.col(gupopage[36:41], ties.method = "first")]
 #gupopage=subset(gupopage, select = -많은연령대)
 
-gupopage=gupopage %>% 
-  group_by(자치구) %>% 
-  mutate(많은연령대=ages)
-
-
 
 gupopage=cbind(gupopage,ages)
 
 names(gupopage)
 gupopage=rename(gupopage, 많은연령대="NA")
 View(gupopage)
+
 #names(gupopage)[36] : ten
 #names(gupopage)[41] : sixty
 
 colnames(gupopage[36:41])[max.col(gupopage[36:41], ties.method = "first")]
+
+write.csv(gupopage, "gupopage.csv")
 
 ################################################################################
 # 내부데이터
