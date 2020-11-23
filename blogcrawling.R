@@ -69,13 +69,15 @@ df_word = filter(df_word, nchar(word)>=2)
 
 # 빈도수 최대값 제외 등 제한조건
 df_word$freq = ifelse(df_word$freq > 100 , 0, df_word$freq)
-# df_word$freq = ifelse(df_word$freq > 40 , 25, df_word$freq)
+
+# 편의점 제외
 df_word$word = ifelse(df_word$word == "CU" | df_word$word == "GS25" |df_word$word == "세븐일레븐", NA, df_word$word )
 
+#100개만 가지고오기
 top20 = df_word %>% 
   filter(!is.na(word)) %>% 
   arrange(desc(freq)) %>% 
-  head(100)
+  head(200)
 top20
 
 # install.packages("wordcloud")
