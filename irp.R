@@ -6,6 +6,7 @@ library(writexl)
 install.packages("lubridate")
 library(lubridate)
 
+
 item=read.csv("archive/olist_order_items_dataset.csv")
 review=read.csv("archive/olist_order_reviews_dataset.csv")
 ir=inner_join(item,review,by="order_id")
@@ -202,9 +203,6 @@ write.csv(gupopage, "gupopage.csv")
 
 
 # 10대가 많은 지역 top5
-
-getAgePer(ten)
-
 getAgePer = function(n){
   gupopage %>% 
     group_by(자치구) %>% 
@@ -213,14 +211,16 @@ getAgePer = function(n){
     head(5)
 }
 
-# 20대
-getAgePer(twenty)
+tenPer=getAgePer(ten)
 
-# 30대
-getAgePer(thirty)
+# 20대가 많은 지역 top5
+twentyPer=getAgePer(twenty)
 
-# 40대
-getAgePer(fourty)
+# 30대가 많은 지역 top5
+thirtyPer=getAgePer(thirty)
+
+# 40대가 많은 지역 top5
+fourtyPer=getAgePer(fourty)
 
 ################################################################################
 # 내부데이터
@@ -308,8 +308,10 @@ hotitem %>%
   arrange(desc(sum)) %>% 
   head(10)
 
+
+  
 # 20대 top10 item
-hotitem %>% 
+hotitem %>%
   filter(age==2) %>% 
   summarise(product_id,sum) %>% 
   arrange(desc(sum)) %>% 
@@ -329,24 +331,51 @@ hotitem %>%
   arrange(desc(sum)) %>% 
   head(10)
 
-# 지역별 나이대 분포
+
+# 지역, 연령별 잘팔린 아이템 
 ageItem=OIPTC %>% 
-  group_by(gu_code, age) %>% 
+  group_by(gu_code, age, product_id) %>% 
   summarise(n=n()) %>% 
   arrange(desc(n))
-
-# 10대 구매자가 많은 지역
-ageItem %>% 
-  filter(age==1) %>% 
-  select(gu_code)
+View(ageItem)
 
 
+# 지역별 10대 구매자가 많이 산 item
+getItem = function(n){
+  ageItem %>% 
+    filter(age=={{n}}) %>% 
+    group_by(gu_code,product_id) %>% 
+    arrange(desc(n))
+}
+
+getItem(1)
+
+# 지역별 20대 구매자가 많이 산 item
+getItem(2)
+
+# 지역별 30대 구매자가 많이 산 item
+getItem(3)
+
+# 지역별 40대 구매자가 많이 산 item
+getItem(4)
+
+# 우리동네에서 잘 팔리는 물건
+getGuItem = function(x,y){
+  OIPTC %>% 
+    filter(gu_code=={{x}} , age=={{y}}) %>%
+    group_by(product_id) %>%
+    summarise(count=n())%>%
+    arrange(desc(count))
+}
+
+getGuItem("양천구",1)
+getGuItem("양천구",2)  
 
 
+row.names(table(OIPTC$age))
+table(OIPTC$age)
 
-
- 
-  
-
-
+for (i in 1:4) {
+  getGuItem("양천구",1)
+}
 
